@@ -2,17 +2,14 @@ package io.github.lamelemon.treefellerEnchantment
 
 import io.github.lamelemon.treefellerEnchantment.commands.LimitlessEnchant
 import io.github.lamelemon.treefellerEnchantment.events.TreeBreakEvent
+import io.github.lamelemon.treefellerEnchantment.utils.Utils
+import io.github.lamelemon.treefellerEnchantment.utils.Utils.configuration
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
 class TreefellerEnchantment : JavaPlugin() {
-
-    companion object {
-        lateinit var enchantment: Enchantment
-    }
 
     override fun onEnable() {
         val configFile = File(dataFolder, "config.yml")
@@ -20,20 +17,20 @@ class TreefellerEnchantment : JavaPlugin() {
             saveResource("config.yml", false)
         }
 
-        val config = YamlConfiguration.loadConfiguration(configFile)
+        configuration = YamlConfiguration.loadConfiguration(configFile)
         val pluginManager = server.pluginManager
-
-        if (!config.getBoolean("enabled", true)) {
+        if (!configuration.getBoolean("enabled", true)) {
             pluginManager.disablePlugin(this)
         }
 
-        val treeStructure = config.getConfigurationSection("tree-structure")
+        val treeStructure = configuration.getConfigurationSection("tree-structure")
         if (treeStructure is ConfigurationSection) {
+            Utils.enchantment = Utils.getEnchant("treefeller:treefeller" + configuration.getString(""))!!
+
             pluginManager.registerEvents(
                 TreeBreakEvent(
-                    config.getBoolean("has-to-sneak", true),
-                    config.getInt("block-cap-multiplier", 100),
-                    treeStructure
+                    configuration.getBoolean("has-to-sneak", true),
+                    configuration.getInt("block-cap-multiplier", 100),
                 ), this)
         } else {
             pluginManager.disablePlugin(this)

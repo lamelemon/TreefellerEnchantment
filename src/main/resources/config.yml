@@ -1,6 +1,9 @@
 enabled: true
 
 has-to-sneak: true # Whether player has to be sneaking to activate tree feller (false = sneaking disables)
+max-tree-radius: 15 # NOT FUNCTIONAL Horizontal distance a block may be from the first block broken
+max-tree-height: 50 # NOT FUNCTIONAL Vertical distance that a block may be from the first block broken
+item-safety: false # Enabling means items will not break off of enchantment usage (and in turn enchantment will stop)
 
 # Be very careful with this as too high a number may lead to a crash
 block-cap-multiplier: 100 # Number to multiply the enchantment level by to get the maximum amount of blocks breakable by the enchantment
@@ -10,6 +13,7 @@ block-cap-multiplier: 100 # Number to multiply the enchantment level by to get t
 # IF YOU DO HOWEVER MAKE CHANGES AND THEY DO NOT WORK, DELETE THE CONFIG FILE AND RESTART THE SERVER TO RESET THE CONFIG
 enchantment:
   # For any changes made to these to take effect you have to fully restart your server
+  name: "treefeller" # enchantment name that shows up in e.g. commands
   description: "Treefeller" # Text to show up as the enchantment name
   weight: 4 # [1, 1024]
   max-level: 5
@@ -30,45 +34,36 @@ enchantment:
     - golden_axe
     - wooden_axe
 
-tree-structure:
+
+# Keys are the materials that treefeller may proc off of, values are other things that trees may spawn with
+# Please refer to https://jd.papermc.io/paper/1.21.10/org/bukkit/Material.html for every possible material
+materials:
   OAK_LOG:
-    - OAK_LOG
     - AZALEA_LEAVES
     - FLOWERING_AZALEA_LEAVES
     - OAK_LEAVES
   SPRUCE_LOG:
-    - SPRUCE_LOG
     - SPRUCE_LEAVES
   BIRCH_LOG:
-    - BIRCH_LOG
     - BIRCH_LEAVES
   JUNGLE_LOG:
-    - JUNGLE_LOG
     - JUNGLE_LEAVES
   ACACIA_LOG:
-    - ACACIA_LOG
     - ACACIA_LEAVES
   DARK_OAK_LOG:
-    - DARK_OAK_LOG
     - DARK_OAK_LEAVES
   MANGROVE_LOG:
-    - MANGROVE_LOG
     - MANGROVE_ROOTS
   CHERRY_LOG:
-    - CHERRY_LOG
     - CHERRY_LEAVES
   PALE_OAK_LOG:
-    - PALE_OAK_LOG
     - PALE_OAK_LEAVES
   CRIMSON_STEM:
-    - CRIMSON_STEM
     - NETHER_WART_BLOCK
     - SHROOMLIGHT
   WARPED_STEM:
-    - WARPED_STEM
     - WARPED_WART_BLOCK
     - SHROOMLIGHT
   MUSHROOM_STEM:
-    - MUSHROOM_STEM
     - BROWN_MUSHROOM_BLOCK
     - RED_MUSHROOM_BLOCK
