@@ -1,5 +1,6 @@
-@file:Suppress("UnstableApiUsage") // Shut up compiler about experimental api usage
-package io.github.lamelemon.treefellerEnchantment
+@file:Suppress("UnstableApiUsage")
+
+package io.github.lamelemon.treefellerEnchantment.bootstrap
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap
@@ -15,23 +16,23 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.EquipmentSlotGroup
 import java.io.File
 
+@SuppressWarnings
 class Bootstrap: PluginBootstrap {
 
     override fun bootstrap(context: BootstrapContext) {
-
-        // Find config
-        val configFile = File(context.dataDirectory.toFile(), "config.yml")
-        val config = YamlConfiguration.loadConfiguration(configFile)
-
         // Register enchantment
         context.lifecycleManager.registerEventHandler(
             RegistryEvents.ENCHANTMENT.compose().newHandler { event ->
+                // Find config
+                val configFile = File(context.dataDirectory.toFile(), "config.yml")
+                val config = YamlConfiguration.loadConfiguration(configFile)
+
                 // This needs to be ran inside compose() as the registry may not exist yet otherwise
                 val itemRegistry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ITEM)
 
                 // This part exists solely for readability, won't affect performance THAT much
-                val rawName: String = config.getString("enchantment.name") ?: "treefeller"
-                val enchantName: String = rawName.lowercase().replace("[^a-z0-9_.\\-]".toRegex(), "_")
+                val enchantName = "treefeller"
+                val enchantmentKey = Key.key("treefeller:$enchantName")
                 val description: String  = config.getString("enchantment.description") ?: "Treefeller"
                 val maxLevel: Int = config.getInt("enchantment.max-level", 5)
 
@@ -44,50 +45,49 @@ class Bootstrap: PluginBootstrap {
                 val weight: Int = config.getInt("enchantment.weight", 4)
                 val anvilCost: Int = config.getInt("enchantment.anvil-cost", 4)
 
-                val supportedItemsList = config.getStringList("enchantment.supported-items").ifEmpty { listOf("netherite_axe",
-                    "diamond_axe",
-                    "iron_axe",
-                    "stone_axe",
-                    "golden_axe",
-                    "wooden_axe") }
-                val activeSlotsList = config.getStringList("enchantment.active-slots").ifEmpty { listOf("MAIN_HAND") }
+                val supportedItemsList = RegistrySet.keySetFromValues(
+                    RegistryKey.ITEM,
+                    config.getStringList("enchantment.supported-items")
+                        .ifEmpty { listOf(
+                            "netherite_axe",
+                            "diamond_axe",
+                            "iron_axe",
+                            "stone_axe",
+                            "golden_axe",
+                            "wooden_axe")
+                        }
+                        .mapNotNull { item -> itemRegistry.get(Key.key(item)) }
+                )
+
+                val activeSlotsList = config.getStringList("enchantment.active-slots")
+                    .ifEmpty { listOf("MAIN_HAND") }.mapNotNull { name -> EquipmentSlotGroup.getByName(name) }
 
                 run {
                     event.registry().register(
-                        EnchantmentKeys.create(Key.key("treefeller:$enchantName"))
+                        EnchantmentKeys.create(enchantmentKey)
                     ) { b ->
                         b.description(Component.text(description))
                             .maxLevel(maxLevel)
                             .minimumCost(
-                                EnchantmentRegistryEntry.EnchantmentCost.of(minCostBase, minCostAdditional)
+                                EnchantmentRegistryEntry.EnchantmentCost.of(
+                                    minCostBase,
+                                    minCostAdditional
+                                )
                             )
                             .maximumCost(
-                                EnchantmentRegistryEntry.EnchantmentCost.of(maxCostBase, maxCostAdditional)
+                                EnchantmentRegistryEntry.EnchantmentCost.of(
+                                    maxCostBase,
+                                    maxCostAdditional
+                                )
                             )
                             .weight(weight)
                             .anvilCost(anvilCost)
-                            .supportedItems(
-                                RegistrySet.keySetFromValues(
-                                    RegistryKey.ITEM,
-                                    mapValid(supportedItemsList) { item -> itemRegistry.get(Key.key(item)) }
-                                )
-                            )
-                            .primaryItems(
-                                RegistrySet.keySetFromValues(
-                                    RegistryKey.ITEM,
-                                    mapValid(supportedItemsList) { item -> itemRegistry.get(Key.key(item)) }
-                                )
-                            )
-                            .activeSlots(
-                                mapValid(activeSlotsList) { name -> EquipmentSlotGroup.getByName(name) }
-                            )
+                            .supportedItems(supportedItemsList)
+                            .primaryItems(supportedItemsList)
+                            .activeSlots(activeSlotsList)
                     }
                 }
             }
         )
-    }
-
-    private fun <T> mapValid(keys: List<String>, mapper: (String) -> T?): List<T> {
-        return keys.mapNotNull(mapper)
     }
 }

@@ -1,7 +1,11 @@
 name: TreefellerEnchantment
 version: '1.0-SNAPSHOT'
 main: io.github.lamelemon.treefellerEnchantment.TreefellerEnchantment
-api-version: '1.21.10'
+api-version: '1.21.11'
 authors: [ lamelemon ]
 description: Treefeller Enchantment
 website: https://github.com/lamelemon/TreefellerEnchantment
+permissions:
+  treefeller.permission.enchant:
+    description: "Permission to run /brokenEnchant"
+    default: op

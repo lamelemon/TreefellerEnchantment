@@ -8,32 +8,17 @@ item-safety: false # Enabling means items will not break off of enchantment usag
 # Be very careful with this as too high a number may lead to a crash
 block-cap-multiplier: 100 # Number to multiply the enchantment level by to get the maximum amount of blocks breakable by the enchantment
 
+command-aliases:
+  - limitlessEnchant
+  - limitlessEnchantment
+  - lm
+  - brokenEnchant
+  - brokenEnchantment
+  - be
+
 # DO NOT CHANGE ANYTHING PAST THIS POINT UNLESS YOU ARE ABSOLUTELY SURE YOU KNOW WHAT YOU ARE DOING
 # CHANGING THESE MAY LEAD TO UNDESIRED BEHAVIOUR SUCH AS THE ENCHANTMENT BEING DELETED OFF OF ITEMS
 # IF YOU DO HOWEVER MAKE CHANGES AND THEY DO NOT WORK, DELETE THE CONFIG FILE AND RESTART THE SERVER TO RESET THE CONFIG
-enchantment:
-  # For any changes made to these to take effect you have to fully restart your server
-  name: "treefeller" # enchantment name that shows up in e.g. commands
-  description: "Treefeller" # Text to show up as the enchantment name
-  weight: 4 # [1, 1024]
-  max-level: 5
-  minimum-cost:
-    base-cost: 5
-    additional-cost: 8
-  maximum-cost:
-    base-cost: 25
-    additional-cost: 8
-  anvil-cost: 4
-  active-slots:
-    - MAINHAND
-  supported-items:
-    - netherite_axe
-    - diamond_axe
-    - iron_axe
-    - stone_axe
-    - golden_axe
-    - wooden_axe
-
 
 # Keys are the materials that treefeller may proc off of, values are other things that trees may spawn with
 # Please refer to https://jd.papermc.io/paper/1.21.10/org/bukkit/Material.html for every possible material
@@ -67,3 +52,25 @@ materials:
   MUSHROOM_STEM:
     - BROWN_MUSHROOM_BLOCK
     - RED_MUSHROOM_BLOCK
+
+enchantment:
+  # For any changes made to these to take effect you have to fully restart your server
+  description: "Treefeller" # Text to show up as the enchantment name
+  weight: 4 # [1, 1024]
+  max-level: 5 # [1, 255]
+  minimum-cost:
+    base-cost: 5
+    additional-cost: 8
+  maximum-cost:
+    base-cost: 25
+    additional-cost: 8
+  anvil-cost: 4 # [0, 2147483647]
+  active-slots:
+    - MAINHAND
+  supported-items:
+    - netherite_axe
+    - diamond_axe
+    - iron_axe
+    - stone_axe
+    - golden_axe
+    - wooden_axe
