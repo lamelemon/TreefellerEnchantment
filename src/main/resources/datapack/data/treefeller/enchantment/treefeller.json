@@ -13,5 +13,15 @@
     "per_level_above_first": 10
   },
   "anvil_cost": 4,
-  "slots": ["mainhand"]
+  "slots": ["mainhand"],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "attribute": "minecraft:block_break_speed",
+        "id": "treefeller:breaking_speed",
+        "amount": -0.75,
+        "operation": "add_multiplied_total"
+      }
+    ]
+  }
 }
