@@ -1,5 +1,5 @@
 name: TreefellerEnchantment
-version: '1.0-SNAPSHOT'
+version: '1.0.1'
 main: io.github.lamelemon.treefellerEnchantment.TreefellerEnchantment
 api-version: '1.21.11'
 authors: [ lamelemon ]

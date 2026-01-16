@@ -1,5 +1,6 @@
 package io.github.lamelemon.treefellerEnchantment.events
 
+import io.github.lamelemon.treefellerEnchantment.utils.Utils
 import io.github.lamelemon.treefellerEnchantment.utils.Utils.configuration
 import io.github.lamelemon.treefellerEnchantment.utils.Utils.enchantment
 import org.bukkit.Material
@@ -76,7 +77,11 @@ class TreeBreakEvent: Listener {
 
 
         blocksLeft--
-        currentPlayer?.breakBlock(block)
+        if (block.type in allowedBlocks) {
+            block.breakNaturally()
+        } else {
+            currentPlayer?.breakBlock(block)
+        }
 
         for (y in -1..1) {
             for (z in -1..1) {
