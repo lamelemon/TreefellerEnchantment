@@ -1,8 +1,6 @@
 package io.github.lamelemon.treefellerEnchantment.events
 
-import io.github.lamelemon.treefellerEnchantment.TreefellerEnchantment
 import io.github.lamelemon.treefellerEnchantment.utils.TreeBreaker
-import io.github.lamelemon.treefellerEnchantment.utils.Utils
 import io.github.lamelemon.treefellerEnchantment.utils.Utils.configuration
 import io.github.lamelemon.treefellerEnchantment.utils.Utils.enchantment
 import io.papermc.paper.event.entity.EntityDamageItemEvent

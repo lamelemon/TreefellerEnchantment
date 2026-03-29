@@ -1,6 +1,5 @@
 package io.github.lamelemon.treefellerEnchantment.utils
 
-import io.github.lamelemon.treefellerEnchantment.TreefellerEnchantment
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
 import io.papermc.paper.registry.TypedKey
@@ -9,7 +8,6 @@ import org.bukkit.Sound
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
 import org.jetbrains.annotations.NotNull
 
 object Utils {
