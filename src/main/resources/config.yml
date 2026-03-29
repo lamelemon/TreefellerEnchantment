@@ -6,7 +6,7 @@ max-tree-height: 50 # Vertical distance that a block may be from the first block
 item-safety: false # Enabling means items will not break off of enchantment usage (and in turn enchantment will stop)
 
 # Be very careful with this as too high a number may lead to a crash
-block-cap: 500 # Number to multiply the enchantment level by to get the maximum amount of blocks breakable by the enchantment
+block-cap: 600 # Number to multiply the enchantment level by to get the maximum amount of blocks breakable by the enchantment
 
 # Command that lets you add enchantments at any level [1, 255]
 limitless-enchantment:

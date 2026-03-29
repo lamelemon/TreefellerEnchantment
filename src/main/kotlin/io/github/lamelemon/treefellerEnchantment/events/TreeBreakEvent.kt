@@ -1,10 +1,9 @@
 package io.github.lamelemon.treefellerEnchantment.events
 
-import io.github.lamelemon.treefellerEnchantment.utils.Utils
+import io.github.lamelemon.treefellerEnchantment.utils.TreeBreaker
 import io.github.lamelemon.treefellerEnchantment.utils.Utils.configuration
 import io.github.lamelemon.treefellerEnchantment.utils.Utils.enchantment
 import org.bukkit.Material
-import org.bukkit.block.Block
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -12,18 +11,17 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.util.Vector
-import org.joml.Vector2d
 import kotlin.math.absoluteValue
+import kotlin.math.pow
 
 class TreeBreakEvent: Listener {
 
-    var blocksLeft: Int = 0
-    var currentPlayer: Player? = null
     val allowedTrees: HashMap<String, HashSet<Material>> = HashMap()
-    var hasToSneak = true
-    var blockCap = 500
-    var maxTreeRadius = 15
-    var maxTreeHeight = 50
+    var currentPlayer: Player? = null
+    var hasToSneak: Boolean
+    var blockCap: Int
+    var maxTreeRadius: Int
+    var maxTreeHeight: Int
 
     init {
         val configurationSection = configuration.getConfigurationSection("materials")
@@ -35,8 +33,8 @@ class TreeBreakEvent: Listener {
         }
 
         hasToSneak = configuration.getBoolean("has-to-sneak", true)
-        blockCap = configuration.getInt("block-cap", 500)
-        maxTreeRadius = configuration.getInt("max-tree-radius", 15)
+        blockCap = configuration.getInt("block-cap", 600)
+        maxTreeRadius = configuration.getDouble("max-tree-radius", 15.0).pow(2).toInt()
         maxTreeHeight = configuration.getInt("max-tree-height", 50)
     }
 
@@ -47,50 +45,25 @@ class TreeBreakEvent: Listener {
         val player = event.player
         if (player.isSneaking != hasToSneak || player == currentPlayer) return
 
+        val block = event.block
+        val allowedBlocks = allowedTrees[block.type.toString()]
+        if (allowedBlocks !is HashSet<Material>) return
+
         val currentTool = player.inventory.itemInMainHand
         if (!currentTool.containsEnchantment(enchantment)) return
 
-        val block = event.block
-        val allowedBlocks = allowedTrees[block.type.toString()]
-        if (allowedBlocks is HashSet<Material>) {
-            currentPlayer = player // Cache player
-            blocksLeft = blockCap
-            treeFeller(block,
-                block.type,
-                block.type,
-                block.location.toVector(),
-                allowedBlocks
-            )
-            currentPlayer = null
-        }
-    }
-
-    fun treeFeller(block: Block, lastBlockType: Material, firstMaterial: Material, firstCords: Vector, allowedBlocks: HashSet<Material>): Boolean {
-        if (blocksLeft <= 0) return false
-        if (block.isEmpty) return true
-
-        if (block.type == firstMaterial && lastBlockType != firstMaterial) return true // Block is a log but last block isn't
-        if (block.type !in allowedBlocks && block.type != firstMaterial) return true // Block isn't allowed
-
-        if ((block.y - firstCords.y).absoluteValue > maxTreeHeight) return true
-        if (Vector2d(block.x - firstCords.x, block.z - firstCords.z).length() > maxTreeRadius) return true
-
-
-        blocksLeft--
-        if (block.type in allowedBlocks) {
-            block.breakNaturally()
-        } else {
-            currentPlayer?.breakBlock(block)
-        }
-
-        for (y in -1..1) {
-            for (z in -1..1) {
-                for (x in -1..1) {
-                    if (!treeFeller(block.getRelative(x, y, z), lastBlockType, firstMaterial, firstCords, allowedBlocks)) return false
-                }
-            }
-        }
-
-        return true
+        currentPlayer = player
+        TreeBreaker(
+            block,
+            player,
+            block.type,
+            Vector(block.x.absoluteValue, block.y.absoluteValue, block.z.absoluteValue),
+            allowedBlocks,
+            currentTool,
+            maxTreeHeight,
+            maxTreeRadius,
+            blockCap
+        )
+        currentPlayer = null
     }
 }
