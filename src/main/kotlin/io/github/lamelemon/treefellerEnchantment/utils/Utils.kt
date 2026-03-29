@@ -1,5 +1,6 @@
 package io.github.lamelemon.treefellerEnchantment.utils
 
+import io.github.lamelemon.treefellerEnchantment.TreefellerEnchantment
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
 import io.papermc.paper.registry.TypedKey
@@ -15,7 +16,6 @@ object Utils {
     val enchantmentRegistry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)
     lateinit var enchantment: Enchantment
     lateinit var configuration: YamlConfiguration
-    lateinit var instance: Plugin
 
     fun messagePlayer(player: Player, message: String) {
         player.sendRichMessage("<gold>[</gold><color:#fafad2>Tree feller</color><gold>]</gold> $message")

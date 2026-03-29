@@ -4,13 +4,15 @@ import io.github.lamelemon.treefellerEnchantment.commands.LimitlessEnchant
 import io.github.lamelemon.treefellerEnchantment.events.TreeBreakEvent
 import io.github.lamelemon.treefellerEnchantment.utils.Utils
 import io.github.lamelemon.treefellerEnchantment.utils.Utils.configuration
-import io.github.lamelemon.treefellerEnchantment.utils.Utils.instance
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
 class TreefellerEnchantment : JavaPlugin() {
+    companion object {
+        lateinit var instance: TreefellerEnchantment
+    }
 
     override fun onEnable() {
         val configFile = File(dataFolder, "config.yml")
